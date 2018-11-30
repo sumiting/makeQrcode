@@ -138,14 +138,15 @@ void MainWindow::mkQrcode(QString line){
             url=urlPre+NameNext;
         }
         i+=1;
-        QImage a = renders->encodeImage(url,14);//350*350=25*16 16
+        QImage a = renders->encodeImage(url,14);//29*14=406
         a.save("./xx.png");
         Mat CodeImg=imread("./xx.png");//Qimage转Mat不方便,重新读取图
-        string c_str = imgPath.toStdString();
-        Mat logoImg=imread(c_str);
+        string loPath = imgPath.toStdString();
+        char *lPath=(char*)loPath.c_str();
+        Mat logoImg=imread(UTF8ToGBK(lPath));
 
-        //加logo
-        Mat ROIimage = CodeImg(cv::Rect(128,128,logoImg.cols,logoImg.rows));
+        //加logo 406*406 203
+        Mat ROIimage = CodeImg(cv::Rect(203-logoImg.cols/2,203-logoImg.rows/2,logoImg.cols,logoImg.rows));
         logoImg.copyTo(ROIimage);
 
         //存储起来
